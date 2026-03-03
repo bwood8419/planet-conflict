@@ -2,27 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Planet Conflicts</title>
   <style>
-    html, body {
+   html, body {
   margin: 0;
+  padding: 0;
   height: 100%;
   background: #121218;
   overflow: hidden;
+}
 
-  /* Center everything */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Make the game area fill the screen */
+#gameWrap {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
 }
-#gameWrap{
-  position: relative;
-  display: inline-block;
-}
+
+/* Keep internal resolution 960x540 but scale to fit the phone */
 canvas {
   background: #15151c;
   image-rendering: pixelated;
+
+  width: 100vw;
+  height: auto;
+  max-height: 100vh;
+
+  /* Prevent stretching */
+  aspect-ratio: 960 / 540;
 }
 
     .hud {
@@ -137,7 +146,7 @@ canvas {
 }
 
 #touchControls {
-    position: absolute;
+    position: fixed;
   inset: 0;
   pointer-events: none; /* only buttons receive events */
   z-index: 9998;
@@ -7493,3 +7502,4 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
+
