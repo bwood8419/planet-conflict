@@ -234,7 +234,88 @@ canvas {
   pointer-events: none;
   opacity: 0;
 }
+/* ===== Joystick ===== */
+:root{
+  --tc-joy: clamp(220px, 32vw, 300px);
+  --tc-joy-knob: clamp(95px, 14vw, 130px);
 
+  /* BIGGER ACTION BUTTONS */
+  --tc-action: clamp(150px, 22vw, 200px);
+  --tc-action-gap: clamp(18px, 3vw, 32px);
+}
+
+#touchControls .tc-left  { 
+  left: clamp(60px, 8vw, 120px); 
+  bottom: clamp(28px, 6vh, 70px); 
+}
+
+#touchControls .tc-right { 
+  right: clamp(20px, 4vw, 80px); 
+  bottom: clamp(32px, 6vh, 80px); 
+}
+
+/* Joystick visuals */
+.tc-joy{
+  position: relative;
+  width: var(--tc-joy);
+  height: var(--tc-joy);
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+}
+.tc-joy-base{
+  position:absolute; inset: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.32);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+.tc-joy-knob{
+  position:absolute;
+  left: 50%; top: 50%;
+  width: var(--tc-joy-knob);
+  height: var(--tc-joy-knob);
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.10);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+}
+
+/* ===== Action buttons (2x2 grid) ===== */
+.tc-actions-grid{
+  display:grid;
+  grid-template-columns: var(--tc-action) var(--tc-action);
+  grid-template-rows: var(--tc-action) var(--tc-action);
+  gap: var(--tc-action-gap);
+  justify-items: end;
+  align-items: end;
+  pointer-events: none;
+}
+.tc-act-empty{
+  width: var(--tc-action);
+  height: var(--tc-action);
+  opacity: 0;
+  pointer-events:none;
+}
+#touchControls .tc-btn.tc-act{
+  width: clamp(170px, 22vw, 220px);
+  height: clamp(170px, 22vw, 220px);
+  border-radius: 999px;
+
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.tc-ico{
+  width: 72%;
+  height: 72%;
+  fill: rgba(255,255,255,0.92);
+}
+
+/* The tc-btn default was sizing circles for the old D-pad.
+   Keep it, but tc-act overrides the size. */
   </style>
   <link rel="manifest" href="./manifest.webmanifest">
 
@@ -281,39 +362,55 @@ canvas {
 
 <div id="gameWrap">
 <canvas id="c" width="960" height="540"></canvas>
-<!-- Mobile-only Touch Controls (hidden on desktop) -->
-<div id="touchControls" aria-hidden="true">
-  <!-- Left cluster (D-pad) -->
+
+<div id="touchControls">
+  <!-- Mobile-only Touch Controls (hidden on desktop) -->
+  <!-- Left cluster (Joystick) -->
   <div class="tc tc-left">
-    <div class="tc-grid">
-      <div class="tc-empty"></div>
-      <div class="tc-empty"></div>
-      <div class="tc-empty"></div>
-
-      <button class="tc-btn" data-hold="arrowleft">◀</button>
-      <div class="tc-empty"></div>
-      <button class="tc-btn" data-hold="arrowright">▶</button>
-
-      <div class="tc-empty"></div>
-      <button class="tc-btn" data-hold="arrowdown">▼</button>
-      <div class="tc-empty"></div>
+    <div id="joy" class="tc-joy" aria-label="Movement joystick">
+      <div class="tc-joy-base"></div>
+      <div id="joyKnob" class="tc-joy-knob"></div>
     </div>
   </div>
 
   <!-- R button near bottom center-left -->
   <div class="tc tc-mid">
-   <button class="tc-btn tc-round" data-tap="r">R</button>
+    <button class="tc-btn tc-round" data-tap="r">R</button>
   </div>
 
   <!-- Right cluster (actions) -->
   <div class="tc tc-right">
-   <div class="tc-actions">
-  <button class="tc-btn tc-wide" data-tap="shift">Sword</button>
-  <button class="tc-btn tc-wide" data-tap="c">Attack</button>
-  <button class="tc-btn tc-wide" data-tap="x">Jump</button>
-</div>
+    <div class="tc-actions-grid">
+      <div class="tc-act-empty"></div>
+
+      <button class="tc-btn tc-act" data-tap="shift" aria-label="Sword">
+        <svg viewBox="0 0 64 64" class="tc-ico" aria-hidden="true">
+          <rect x="28" y="6" width="8" height="34" rx="3"></rect>
+          <rect x="24" y="40" width="16" height="6" rx="2"></rect>
+          <rect x="27" y="46" width="10" height="12" rx="2"></rect>
+        </svg>
+      </button>
+
+      <button class="tc-btn tc-act" data-tap="c" aria-label="Attack">
+        <svg viewBox="0 0 64 64" class="tc-ico" aria-hidden="true">
+          <path d="M48 18c-8 2-16 8-22 14l6 6c6-6 12-14 14-22z"></path>
+          <path d="M18 46l-6 6 4 4 6-6-4-4z"></path>
+          <path d="M22 42l18-18 4 4-18 18-4-4z"></path>
+        </svg>
+      </button>
+
+      <button class="tc-btn tc-act" data-tap="x" aria-label="Jump">
+        <svg viewBox="0 0 64 64" class="tc-ico" aria-hidden="true">
+          <circle cx="40" cy="14" r="6"></circle>
+          <path d="M24 30c8-6 16-8 22-6l2 6c-6-2-12-1-18 4l-6 8-6-4 6-8z"></path>
+          <path d="M22 46l10-10 6 4-10 10h-6z"></path>
+          <path d="M36 44l10 8-4 6-12-8 6-6z"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 </div>
+
 <script>
 (() => {
   "use strict";
@@ -1526,7 +1623,84 @@ function touchTapKey(k) {
   // Remove key shortly after so it behaves like a tap
   setTimeout(() => keys.delete(k), 80);
 }
+function bindJoystick() {
+  const joy = document.getElementById("joy");
+  const knob = document.getElementById("joyKnob");
+  if (!joy || !knob) return;
 
+  let active = false;
+  let pid = null;
+
+  const setKeysFromAxis = (ax, ay) => {
+    // Deadzone so tiny moves don’t trigger input
+    const DZ = 0.22;
+
+    // Horizontal
+    touchHoldKey("arrowleft",  ax < -DZ);
+    touchHoldKey("arrowright", ax >  DZ);
+
+    // Optional: drag down to trigger arrowdown
+    touchHoldKey("arrowdown",  ay >  0.55);
+  };
+
+  const resetJoy = () => {
+    active = false;
+    pid = null;
+    knob.style.transform = "translate(-50%, -50%)";
+    setKeysFromAxis(0, 0);
+  };
+
+  joy.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    active = true;
+    pid = e.pointerId;
+    joy.setPointerCapture(pid);
+  }, { passive: false });
+
+  joy.addEventListener("pointermove", (e) => {
+    if (!active || e.pointerId !== pid) return;
+
+    const r = joy.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top  + r.height / 2;
+
+    let dx = e.clientX - cx;
+    let dy = e.clientY - cy;
+
+    const max = (r.width / 2) - (knob.getBoundingClientRect().width / 2);
+    const dist = Math.hypot(dx, dy);
+
+    // clamp to circle
+    if (dist > max) {
+      const s = max / dist;
+      dx *= s;
+      dy *= s;
+    }
+
+    // Move knob
+    knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+    // Normalize axis to [-1..1]
+    const ax = dx / max;
+    const ay = dy / max;
+
+    setKeysFromAxis(ax, ay);
+  }, { passive: false });
+
+  joy.addEventListener("pointerup", (e) => {
+    if (e.pointerId !== pid) return;
+    e.preventDefault();
+    resetJoy();
+  }, { passive: false });
+
+  joy.addEventListener("pointercancel", (e) => {
+    if (e.pointerId !== pid) return;
+    e.preventDefault();
+    resetJoy();
+  }, { passive: false });
+
+  joy.addEventListener("lostpointercapture", resetJoy);
+}
 // Bind all buttons
 function bindTouchButtons() {
   if (!touchEl) return;
@@ -1570,9 +1744,10 @@ function bindTouchButtons() {
   });
 }
 
-// Initialize touch UI
-bindTouchButtons();
-updateTouchVisibility();
+    // Initialize touch UI
+       bindTouchButtons();
+       bindJoystick();
+       updateTouchVisibility();
   const GAME_KEYS = new Set([
     
     "arrowleft","arrowright","arrowup","arrowdown",
