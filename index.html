@@ -12,7 +12,6 @@
   background: #121218;
   overflow: hidden;
 }
-
 /* Make the game area fill the screen */
 #gameWrap {
   position: fixed;
@@ -236,12 +235,12 @@ canvas {
 }
 /* ===== Joystick ===== */
 :root{
-  --tc-joy: clamp(220px, 32vw, 300px);
-  --tc-joy-knob: clamp(95px, 14vw, 130px);
+  --tc-joy: clamp(180px, 18vmin, 240px);
+  --tc-joy-knob: clamp(70px, 8vmin, 110px);
 
   /* BIGGER ACTION BUTTONS */
-  --tc-action: clamp(150px, 22vw, 200px);
-  --tc-action-gap: clamp(18px, 3vw, 32px);
+  --tc-action: clamp(120px, 12vmin, 160px);
+--tc-action-gap: clamp(12px, 2vmin, 20px);
 }
 
 #touchControls .tc-left  { 
@@ -299,8 +298,9 @@ canvas {
   pointer-events:none;
 }
 #touchControls .tc-btn.tc-act{
-  width: clamp(170px, 22vw, 220px);
-  height: clamp(170px, 22vw, 220px);
+  width: clamp(140px, 16vw, 180px);
+  height: clamp(140px, 16vw, 180px);
+
   border-radius: 999px;
 
   pointer-events: auto;
@@ -309,8 +309,8 @@ canvas {
   padding: 0;
 }
 .tc-ico{
-  width: 72%;
-  height: 72%;
+  width: 62%;
+  height: 62%;
   fill: rgba(255,255,255,0.92);
 }
 
@@ -7677,4 +7677,10 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
+
+
+
+
+
+
 
