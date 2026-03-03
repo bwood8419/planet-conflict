@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = "planet-conflict-v3";
+const CACHE_NAME = "planet-conflict-v4";
 
 const ASSETS = [
   "./",
@@ -59,4 +59,5 @@ self.addEventListener("fetch", (event) => {
   );
 
 });
+
 
