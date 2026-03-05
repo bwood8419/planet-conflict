@@ -1641,6 +1641,8 @@ function bindJoystick() {
 
     // Optional: drag down to trigger arrowdown
     touchHoldKey("arrowdown",  ay >  0.55);
+    touchHoldKey("arrowup", ay < -0.55);
+
   };
 
   const resetJoy = () => {
@@ -7677,6 +7679,7 @@ if ("serviceWorker" in navigator) {
 </script>
 </body>
 </html>
+
 
 
 
